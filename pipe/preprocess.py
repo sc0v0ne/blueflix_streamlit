@@ -72,9 +72,3 @@ def preprocess(path_input):
     print('Sucefully train genger')
     print('-' * 100)   
 
-
-if __name__ == '__main__':
-
-    NAME_INPUT_DIR = sys.argv[1]
-
-    preprocess(NAME_INPUT_DIR)
