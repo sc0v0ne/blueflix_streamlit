@@ -1,0 +1,10 @@
+FROM python:3.10
+
+WORKDIR /preprocess
+
+RUN pip install --upgrade pip & \
+    pip install \
+    numpy==1.24.0 \
+    pandas=2.0.3
+
+COPY pipe /preprocess
