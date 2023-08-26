@@ -5,12 +5,15 @@ import pandas as pd
 
 
 def preprocess(path_input):
-    datasets_names = os.listdir(path_input)
-    print(datasets_names, flush=True)
+    PATTERN_PATH = os.path.join('/preprocess', 'data')
+    datasets_names = os.listdir(os.path.join(PATTERN_PATH, path_input))
+    print('-' * 100)
+    print('\nLog preprocess execution\n')
+    print(datasets_names)
 
     all_data = []
     for dir in datasets_names:
-        read_pd = pd.read_csv(os.path.join('data/raw', dir))
+        read_pd = pd.read_csv(os.path.join(PATTERN_PATH, path_input, dir))
         read_pd['channel_streaming'] = dir.split('_')[0]
         all_data.append(read_pd)
 
@@ -57,10 +60,17 @@ def preprocess(path_input):
     group_dummies = group_dummies.fillna(0).astype('uint8')
 
     data_titles['title'] = data_titles['title'].apply(lambda x: x.upper())
-
-    data_titles.to_csv('data/processed/data_titles_processed.csv', index=False)
-    group_dummies.to_csv('data/processed/train_genger.csv',
+    
+    OUTPUT= os.path.join(PATTERN_PATH, 'processed')
+    if not os.path.exists(OUTPUT):
+        os.mkdir(OUTPUT)
+    
+    data_titles.to_csv('/preprocess/data/processed/data_titles_processed.csv', index=False)
+    print('Sucefully Data Titles')    
+    group_dummies.to_csv('/preprocess/data/processed/train_genger.csv',
                          index=False)
+    print('Sucefully train genger')
+    print('-' * 100)   
 
 
 if __name__ == '__main__':
