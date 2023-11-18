@@ -1,12 +1,16 @@
+import os
 import pandas as pd
 import streamlit as st
-from components.query import recommends
+from components.query import recommends, recommender_by_gender
 
 
-def load_data():
-    df = pd.read_csv('./src/data/final/dataset_titles_final.csv', sep=',')
+def load_data(dir_data: str, name_dataset: str):
+    path_data = os.path.join('./src/data', dir_data, name_dataset)
+    df = pd.read_csv(f'{path_data}.csv', sep=',')
     return df
-DF = load_data()
+DF = load_data('final', 'dataset_titles_final')
+DF_GENDER = load_data('processed', 'train_gender')
+cols = DF_GENDER.columns
 
 st.set_page_config(page_title="Blueflix",
                    page_icon="🍿",
@@ -61,3 +65,18 @@ if st.button('Recommendations'):
 
     recommends(DF, title, top, extra_cols)
 
+st.markdown('------------------------')
+
+st.title(' Select By Gender 📽️🍿 ')
+
+
+
+options = st.multiselect(
+    'Select by Gender',
+    cols,
+    max_selections=3,
+    )
+
+if st.button('Search'):
+
+    recommender_by_gender(DF, options, cols)
