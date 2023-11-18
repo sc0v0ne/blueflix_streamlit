@@ -4,7 +4,7 @@ from src.components import query
 
 
 def load_data():
-    df = pd.read_csv('src/data/final/dataset_titles_final.csv', sep=',')
+    df = pd.read_csv('./src/data/final/dataset_titles_final.csv', sep=',')
     return df
 DF = load_data()
 
