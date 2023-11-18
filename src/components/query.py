@@ -8,7 +8,7 @@ def recommends(
                 extra_cols: dict,
                 ) -> pd.DataFrame:
 
-    rename = name.upper()
+    rename = name.lower()
     exists_title = len(dataset[dataset['title'].str.contains(rename)])
     
     if exists_title == 0:

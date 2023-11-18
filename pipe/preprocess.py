@@ -1,20 +1,17 @@
 import os
-import sys
-
 import pandas as pd
 
 
 def preprocess(path_input):
-    PATTERN_PATH = os.path.join('/preprocess', 'data')
-    datasets_names = os.listdir(os.path.join(PATTERN_PATH, path_input))
-    print('-' * 100)
-    print('\nLog preprocess execution\n')
-    print(datasets_names)
+    PATTERN_PATH = os.path.join('/preprocess', 'data', path_input)
+    datasets_names = os.listdir(PATTERN_PATH)
+    print(datasets_names, flush=True)
 
     all_data = []
-    for dir in datasets_names:
-        read_pd = pd.read_csv(os.path.join(PATTERN_PATH, path_input, dir))
-        read_pd['channel_streaming'] = dir.split('_')[0]
+    for dir_ in datasets_names:
+        path_file_csv = os.path.join(PATTERN_PATH, dir_)
+        read_pd = pd.read_csv(path_file_csv)
+        read_pd['channel_streaming'] = dir_.split('_')[0]
         all_data.append(read_pd)
 
     try:
@@ -48,27 +45,42 @@ def preprocess(path_input):
 
     data_titles = pd.concat(all_data, axis=0)
 
-    df_split = data_titles['gender_type'].str.split(',', expand=True)
-    df_split = df_split.fillna('-')
+    data_titles['gender_type'] = data_titles['gender_type'].str.lower()
 
-    group_dummies = [
-        pd.get_dummies(df_split[y].apply(lambda x: x.strip()), dtype='int')
-        for y in df_split.columns
-    ]
-
-    group_dummies = pd.concat(group_dummies, axis=1)
-    group_dummies = group_dummies.fillna(0).astype('uint8')
-
-    data_titles['title'] = data_titles['title'].apply(lambda x: x.upper())
     
-    OUTPUT= os.path.join(PATTERN_PATH, 'processed')
+    df_split = data_titles['gender_type'].str.split(',', expand=True)
+
+    df_split = df_split.fillna('-')
+    path_input
+    for x in df_split.columns:
+        df_split[x] = df_split[x].apply(lambda i: i.strip())
+    
+    group_dummies = [df_split[d] for d in df_split.columns]
+    
+    for x in group_dummies:
+        print(type(x))
+    
+    group_dummies = [pd.get_dummies(d, dtype='int') for d in group_dummies]
+    
+    print(len(group_dummies))
+    
+    group_dummies = pd.concat(group_dummies, axis=1)
+    
+    group_dummies = group_dummies.fillna(0).astype('uint8')
+    
+    group_dummies.drop(columns=['-'], axis=1, inplace=True)
+    
+    data_titles['title'] = data_titles['title'].apply(lambda x: x.lower())
+    
+    
+    OUTPUT= os.path.join('/preprocess', 'data', 'processed')
     if not os.path.exists(OUTPUT):
         os.mkdir(OUTPUT)
     
     data_titles.to_csv('/preprocess/data/processed/data_titles_processed.csv', index=False)
     print('Sucefully Data Titles')    
-    group_dummies.to_csv('/preprocess/data/processed/train_genger.csv',
+    group_dummies.to_csv('/preprocess/data/processed/train_gender.csv',
                          index=False)
-    print('Sucefully train genger')
-    print('-' * 100)   
+    print('Sucefully group_dummies')
+    print('-' * 100)
 
