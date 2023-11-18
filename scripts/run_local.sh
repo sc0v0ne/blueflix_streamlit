@@ -1,3 +1,3 @@
 #!/bin/bash
-./scripts/run_local.sh
-docker run streamlit_app:latest
+bash ./scripts/build.sh
+docker run -v ${PWD}/src:/streamlit/src -p 7999:7999 streamlit_app:latest

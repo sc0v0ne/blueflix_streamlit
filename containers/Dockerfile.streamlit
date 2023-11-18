@@ -9,9 +9,9 @@ RUN pip install --upgrade pip & \
 WORKDIR /streamlit
 
 COPY /src /streamlit/src
-COPY /.streamlit /streamlit/.streamlit
+#COPY /.streamlit /streamlit/.streamlit
 #COPY /main.py /streamlit
 
 EXPOSE 7999
 
-ENTRYPOINT ["streamlit", "run", "/streamlit/main.py", "--server.port=7999"]
+ENTRYPOINT ["streamlit", "run", "/streamlit/src/main.py", "--server.port=7999"]

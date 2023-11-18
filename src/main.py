@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from src.components import query
+from components import query
 
 
 def load_data():
@@ -21,7 +21,7 @@ st.set_page_config(page_title="Blueflix",
                        "# This is a header. This is an *extremely* cool app!"
                    })
 
-st.title(' 📽️🍿 Bluefliiiiiiiiiiix')
+st.title(' 📽️🍿 Blueflix')
 
 st.markdown("😀 Hey!!!,  how are you ?")
 
