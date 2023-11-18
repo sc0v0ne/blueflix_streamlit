@@ -21,8 +21,7 @@ def recommends(
 
     extra_cols = [x for x, y in extra_cols.items() if y]
     
-    new_search = name.upper()
-    movie = dataset[dataset['title'] == new_search][['clusters_genre_type']]
+    movie = dataset[dataset['title'] == rename][['clusters_genre_type']]
     reset_movie = movie.reset_index()
     reset_movie = reset_movie.at[0, 'clusters_genre_type']
     k_id = int(reset_movie)
