@@ -10,7 +10,7 @@ DF = load_data()
 
 st.set_page_config(page_title="Blueflix",
                    page_icon="🍿",
-                   layout="centered",
+                   layout="wide",
                    initial_sidebar_state="collapsed",
                    menu_items={
                        'Get Help':
@@ -41,14 +41,13 @@ duration_seconds = st.checkbox('Duration Seconds')
 director = st.checkbox('Director')
 country = st.checkbox('Country')
 channel_streaming = st.checkbox('Channel Streaming')
-description = st.checkbox('Description')
 
 extra_cols = {
     'duration_seconds': duration_seconds,
     'director': director,
     'country': country,
     'channel_streaming': channel_streaming,
-    'description': description,
+
 }
 
 if st.button('Recommendations'):
