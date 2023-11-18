@@ -32,15 +32,22 @@ st.markdown("I was happy to look for recommendations.")
 st.markdown(
     "If you can help by giving my project a star, I really appreciate it.")
 
-title = st.text_input('Enter the title you are looking for', 'Monster Maker')
-top = st.text_input('Enter number of recommendations', 10)
 
-st.markdown("Extra Columns:")
+col1, col2 = st.columns(2)
 
-duration_seconds = st.checkbox('Duration Seconds')
-director = st.checkbox('Director')
-country = st.checkbox('Country')
-channel_streaming = st.checkbox('Channel Streaming')
+with col1:
+    st.header("Recommends")
+    title = st.text_input('Enter the title you are looking for', 'Monster Maker')
+    top = st.text_input('Enter number of recommendations', 10)
+
+with col2:
+    st.header("Extra Columns")
+
+    duration_seconds = st.checkbox('Duration Seconds')
+    director = st.checkbox('Director')
+    country = st.checkbox('Country')
+    channel_streaming = st.checkbox('Channel Streaming')
+
 
 extra_cols = {
     'duration_seconds': duration_seconds,
