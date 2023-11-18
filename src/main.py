@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from components import query
+from components.query import recommends
 
 
 def load_data():
@@ -36,6 +36,6 @@ title = st.text_input('Enter the title you are looking for', 'Monster Maker')
 top = st.text_input('Enter number of recommendations', 10)
 
 if st.button('Recommendations'):
-    df_query = query.query_name_title(DF, title, top)
-    
-    st.dataframe(df_query, use_container_width=True)
+
+    recommends(DF, title, top)
+
