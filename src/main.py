@@ -35,7 +35,23 @@ st.markdown(
 title = st.text_input('Enter the title you are looking for', 'Monster Maker')
 top = st.text_input('Enter number of recommendations', 10)
 
+st.markdown("Extra Columns:")
+
+duration_seconds = st.checkbox('Duration Seconds')
+director = st.checkbox('Director')
+country = st.checkbox('Country')
+channel_streaming = st.checkbox('Channel Streaming')
+description = st.checkbox('Description')
+
+extra_cols = {
+    'duration_seconds': duration_seconds,
+    'director': director,
+    'country': country,
+    'channel_streaming': channel_streaming,
+    'description': description,
+}
+
 if st.button('Recommendations'):
 
-    recommends(DF, title, top)
+    recommends(DF, title, top, extra_cols)
 
