@@ -1,5 +1,7 @@
+import os
 import pandas as pd
 from components.responses import response_markdown, response_recommends
+import joblib as jl
 
 def recommends(
                 dataset:pd.DataFrame,
@@ -30,4 +32,25 @@ def recommends(
     result = dataset[dataset['clusters_genre_type'] == k_id][cols_view][:int(top_n)]
     result.set_index('title')
 
+    return response_recommends(result)
+
+
+def recommender_by_gender(dataset, options: list, cols: list):
+    
+    if options == 0:
+        return response_markdown('Empty')
+    
+    input_group = {x: [0] for x in cols}
+    for x in options:
+        input_group[x] = [1]
+    y_input = pd.DataFrame(input_group)
+    path_model =  os.path.join('./src/data', 'models', 'model_kmeans_20231118')
+    model = jl.load(f'{path_model}.pkl')
+    
+    pred_test = model.predict(y_input)
+    pred_test[0]
+    
+    result = dataset[dataset['clusters_genre_type'] == pred_test[0] ][['title', 'gender_type', 'channel_streaming']]
+    result.set_index('title')
+    
     return response_recommends(result)
