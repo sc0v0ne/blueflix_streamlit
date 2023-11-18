@@ -10,7 +10,7 @@ WORKDIR /streamlit
 
 COPY /src /streamlit/src
 COPY /.streamlit /streamlit/.streamlit
-COPY /main.py /streamlit
+#COPY /main.py /streamlit
 
 EXPOSE 7999
 

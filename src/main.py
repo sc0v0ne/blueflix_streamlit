@@ -21,7 +21,7 @@ st.set_page_config(page_title="Blueflix",
                        "# This is a header. This is an *extremely* cool app!"
                    })
 
-st.title(' 📽️🍿 Blueflix')
+st.title(' 📽️🍿 Bluefliiiiiiiiiiix')
 
 st.markdown("😀 Hey!!!,  how are you ?")
 
