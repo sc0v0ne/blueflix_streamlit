@@ -3,15 +3,6 @@ import pandas as pd
 import streamlit as st
 from components.query import recommends, recommender_by_gender
 
-
-def load_data(dir_data: str, name_dataset: str):
-    path_data = os.path.join('./src/data', dir_data, name_dataset)
-    df = pd.read_csv(f'{path_data}.csv', sep=',')
-    return df
-DF = load_data('final', 'dataset_titles_final')
-DF_GENDER = load_data('processed', 'train_gender')
-cols = DF_GENDER.columns
-
 st.set_page_config(page_title="Blueflix",
                    page_icon="🍿",
                    layout="wide",
@@ -25,6 +16,19 @@ st.set_page_config(page_title="Blueflix",
                        "# This is a header. This is an *extremely* cool app!"
                    })
 
+def load_data(
+            dir_data: str,
+            name_dataset: str
+            ) -> pd.DataFrame:
+    path_data = os.path.join('./src/data', dir_data, name_dataset)
+    df = pd.read_csv(f'{path_data}.csv', sep=',')
+    return df
+
+DF = load_data('final', 'dataset_titles_final')
+DF_GENDER = load_data('processed', 'train_gender')
+COLS = DF_GENDER.columns
+
+
 st.title(' 📽️🍿 Blueflix')
 
 st.markdown("😀 Hey!!!,  how are you ?")
@@ -33,9 +37,7 @@ st.markdown("This project I developed to apply skills that I am learning.")
 
 st.markdown("I was happy to look for recommendations.")
 
-st.markdown(
-    "If you can help by giving my project a star, I really appreciate it.")
-
+st.markdown("If you can help by giving my project a star, I really appreciate it.")
 
 col1, col2 = st.columns(2)
 
@@ -71,10 +73,10 @@ st.title(' Select by Genre 📽️🍿 ')
 
 options = st.multiselect(
     'In the menu select up to 3 types of movie or TV show genres:',
-    cols,
+    COLS,
     max_selections=3,
     )
 
 if st.button('Search'):
 
-    recommender_by_gender(DF, options, cols)
+    recommender_by_gender(DF, options, COLS)
