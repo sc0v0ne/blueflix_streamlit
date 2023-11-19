@@ -9,6 +9,9 @@ RUN pip install --upgrade pip & \
 WORKDIR /streamlit
 
 COPY /src /streamlit/src
+COPY .streamlit /streamlit/.streamlit
+COPY .streamlit /streamlit/src/.streamlit
+COPY .streamlit /
 
 EXPOSE 7999
 
