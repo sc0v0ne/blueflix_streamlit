@@ -67,12 +67,10 @@ if st.button('Recommendations'):
 
 st.markdown('------------------------')
 
-st.title(' Select By Gender 📽️🍿 ')
-
-
+st.title(' Select by Genre 📽️🍿 ')
 
 options = st.multiselect(
-    'Select by Gender',
+    'In the menu select up to 3 types of movie or TV show genres:',
     cols,
     max_selections=3,
     )

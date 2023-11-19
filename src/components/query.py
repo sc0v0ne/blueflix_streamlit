@@ -24,12 +24,12 @@ def recommends(
 
     extra_cols = [x for x, y in extra_cols.items() if y]
 
-    movie = dataset[dataset['title'] == rename][['clusters_genre_type']]
+    movie = dataset[dataset['title'] == rename][['clusters_gender']]
     reset_movie = movie.reset_index()
-    reset_movie = reset_movie.at[0, 'clusters_genre_type']
+    reset_movie = reset_movie.at[0, 'clusters_gender']
     k_id = int(reset_movie)
     cols_view = ['title', 'gender_type'] + extra_cols
-    result = dataset[dataset['clusters_genre_type'] == k_id][cols_view][:int(top_n)]
+    result = dataset[dataset['clusters_gender'] == k_id][cols_view][:int(top_n)]
     result.set_index('title')
 
     return response_recommends(result)
@@ -50,7 +50,7 @@ def recommender_by_gender(dataset, options: list, cols: list):
     pred_test = model.predict(y_input)
     pred_test[0]
     
-    result = dataset[dataset['clusters_genre_type'] == pred_test[0] ][['title', 'gender_type', 'channel_streaming']]
+    result = dataset[dataset['clusters_gender'] == pred_test[0] ][['title', 'gender_type', 'channel_streaming']]
     result.set_index('title')
     
     return response_recommends(result)
