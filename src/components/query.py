@@ -2,13 +2,25 @@ import os
 import pandas as pd
 from components.responses import response_markdown, response_recommends
 import joblib as jl
+import streamlit as st
 
 def recommends(
                 dataset:pd.DataFrame,
                 name: str,
                 top_n: int,
                 extra_cols: dict,
-                ) -> pd.DataFrame:
+                ) -> st.dataframe:
+    """Generate recommends
+
+    Args:
+        dataset (pd.DataFrame): Datatset input
+        name (str):  name movie or tv show
+        top_n (int):  number of recommendations for return
+        extra_cols (dict):  Extra columns for return 
+
+    Returns:
+        st.dataframe: component st.dataframe
+    """
 
     rename = name.lower()
     exists_title = len(dataset[dataset['title'].str.contains(rename)])
@@ -35,8 +47,22 @@ def recommends(
     return response_recommends(result)
 
 
-def recommender_by_gender(dataset, options: list, cols: list):
-    
+def recommender_by_gender(
+                        dataset: pd.DataFrame,
+                        options: list,
+                        cols: list
+                        ) -> st.dataframe:
+    """Generate recommends by genre
+
+    Args:
+        dataset (pd.DataFrame): Dataset input
+        options (list): list genres
+        cols (list): list names genres
+
+    Returns:
+        st.dataframe: component st.dataframe
+    """
+
     if options == 0:
         return response_markdown('Empty')
     
