@@ -2,14 +2,21 @@ import os
 import pandas as pd
 
 
-def preprocess(path_input):
-    PATTERN_PATH = os.path.join('/preprocess', 'data', path_input)
-    datasets_names = os.listdir(PATTERN_PATH)
-    print(datasets_names, flush=True)
+def preprocess(input_dir):
+    
+    print('Initialize preprocess')
+    print('-' * 80)
+
+    PATTERN_PATH = os.path.join('/pipe', 'data')
+
+    path_data = os.path.join(PATTERN_PATH,  input_dir)
+    datasets_names = os.listdir(path_data)
+
+    print('Data name: ', datasets_names)
 
     all_data = []
     for dir_ in datasets_names:
-        path_file_csv = os.path.join(PATTERN_PATH, dir_)
+        path_file_csv = os.path.join(path_data, dir_)
         read_pd = pd.read_csv(path_file_csv)
         read_pd['channel_streaming'] = dir_.split('_')[0]
         all_data.append(read_pd)
@@ -41,28 +48,27 @@ def preprocess(path_input):
         data['gender_type'].apply(lambda x: x.upper())
 
     for data in all_data:
-        print(data.shape, flush=True)
+        print('Shape data: ', data.shape)
 
     data_titles = pd.concat(all_data, axis=0)
 
     data_titles['gender_type'] = data_titles['gender_type'].str.lower()
 
-    
     df_split = data_titles['gender_type'].str.split(',', expand=True)
 
     df_split = df_split.fillna('-')
-    path_input
+
     for x in df_split.columns:
         df_split[x] = df_split[x].apply(lambda i: i.strip())
-    
+
     group_dummies = [df_split[d] for d in df_split.columns]
-    
+
     for x in group_dummies:
-        print(type(x))
-    
+        print('Type dummies', type(x))
+
     group_dummies = [pd.get_dummies(d, dtype='int') for d in group_dummies]
     
-    print(len(group_dummies))
+    print('Amount dummies:', len(group_dummies))
     
     group_dummies = pd.concat(group_dummies, axis=1)
     
@@ -71,16 +77,18 @@ def preprocess(path_input):
     group_dummies.drop(columns=['-'], axis=1, inplace=True)
     
     data_titles['title'] = data_titles['title'].apply(lambda x: x.lower())
-    
-    
-    OUTPUT= os.path.join('/preprocess', 'data', 'processed')
+
+    OUTPUT= os.path.join(PATTERN_PATH, 'processed')
     if not os.path.exists(OUTPUT):
         os.mkdir(OUTPUT)
     
-    data_titles.to_csv('/preprocess/data/processed/data_titles_processed.csv', index=False)
-    print('Sucefully Data Titles')    
-    group_dummies.to_csv('/preprocess/data/processed/train_gender.csv',
-                         index=False)
+    path_data_titles = os.path.join(OUTPUT, 'data_titles_processed')
+    data_titles.to_csv(f'{path_data_titles}.csv', index=False)
+    print('Sucefully Data Titles')
+
+    path_data_dummies = os.path.join(OUTPUT, 'train_gender')
+    group_dummies.to_csv(f'{path_data_dummies}.csv', index=False)
     print('Sucefully group_dummies')
-    print('-' * 100)
+
+    print('-' * 80)
 
