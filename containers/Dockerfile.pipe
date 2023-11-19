@@ -1,6 +1,6 @@
 FROM python:3.10
 
-WORKDIR /preprocess
+WORKDIR /pipe
 
 RUN pip install --upgrade pip & \
     pip install \
@@ -9,4 +9,4 @@ RUN pip install --upgrade pip & \
     scikit-learn==1.3.0 \
     joblib==1.3.2
 
-COPY pipe /preprocess
+COPY pipe /pipe

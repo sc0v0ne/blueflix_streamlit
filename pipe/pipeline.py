@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     preprocess(NAME_INPUT_DIR)
     
-    PATH_PROCESSED = os.path.join('/preprocess')
+    PATH_PROCESSED = os.path.join('/pipe')
     DATA_TRAIN = 'train_gender.csv'
     DATA_MOVIES_SERIES = 'data_titles_processed.csv'
 
