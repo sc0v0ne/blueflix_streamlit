@@ -1,6 +1,27 @@
 import os
 import pandas as pd
+import numpy as np
 
+
+def clear_cols(x):
+
+    x = (
+        x
+        .replace('&', ',')
+        .replace('-', ',')
+        .replace('tv shows', ',')
+        .replace('movies', ',')
+        .replace('/', ',')
+        .replace('tv', ',')
+        )
+    return x
+
+
+def transform_binary(x):
+    if x > 1:
+        return  1
+    else:
+        return x
 
 def preprocess(input_dir):
     
@@ -54,9 +75,12 @@ def preprocess(input_dir):
 
     data_titles['gender_type'] = data_titles['gender_type'].str.lower()
 
+    data_titles['gender_type'] = data_titles['gender_type'].apply(lambda x: clear_cols(str(x)))
+
     df_split = data_titles['gender_type'].str.split(',', expand=True)
 
-    df_split = df_split.fillna('-')
+    df_split = df_split.fillna('-').drop(columns=[3,4, 5, 6, 7, 8, 9], axis=1)
+
 
     for x in df_split.columns:
         df_split[x] = df_split[x].apply(lambda i: i.strip())
@@ -69,12 +93,29 @@ def preprocess(input_dir):
     group_dummies = [pd.get_dummies(d, dtype='int') for d in group_dummies]
     
     print('Amount dummies:', len(group_dummies))
+
+    A1 = group_dummies[0]
+    A2 = group_dummies[1]
+    A3 = group_dummies[2]
     
-    group_dummies = pd.concat(group_dummies, axis=1)
+    AU  = list(A1.columns) + list(A2.columns)+ list(A3.columns)
+    AU1 = list(set(AU))
+
+    make_dataframe = {x: np.zeros(shape=(A1.shape[0],), dtype=int) for x in AU1}
+
+    dataframe_make = pd.DataFrame(make_dataframe)
     
-    group_dummies = group_dummies.fillna(0).astype('uint8')
+    for dummie in [A1, A2, A3]:
+        for col in dummie.columns:
+            dataframe_make[col] = list((dataframe_make[col] + dummie[col]).dropna())
+
+    for col in dataframe_make.columns:
+        dataframe_make[col] = dataframe_make[col].apply(lambda x: transform_binary(x))
+
+
+    dataframe_make = dataframe_make.fillna(0).astype('uint8')
     
-    group_dummies.drop(columns=['-'], axis=1, inplace=True)
+    dataframe_make.drop(columns=['-'], axis=1, inplace=True)
     
     data_titles['title'] = data_titles['title'].apply(lambda x: x.lower())
 
@@ -87,7 +128,7 @@ def preprocess(input_dir):
     print('Sucefully Data Titles')
 
     path_data_dummies = os.path.join(OUTPUT, 'train_gender')
-    group_dummies.to_csv(f'{path_data_dummies}.csv', index=False)
+    dataframe_make.to_csv(f'{path_data_dummies}.csv', index=False)
     print('Sucefully group_dummies')
 
     print('-' * 80)

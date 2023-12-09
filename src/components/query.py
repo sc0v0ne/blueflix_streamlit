@@ -65,12 +65,12 @@ def recommender_by_gender(
 
     if options == 0:
         return response_markdown('Empty')
-    
+
     input_group = {x: [0] for x in cols}
     for x in options:
         input_group[x] = [1]
     y_input = pd.DataFrame(input_group)
-    path_model =  os.path.join('./src/data', 'models', 'model_kmeans_20231118')
+    path_model = os.path.join('./src/data', 'models', 'model_kmeans_20231118')
     model = jl.load(f'{path_model}.pkl')
     
     pred_test = model.predict(y_input)
